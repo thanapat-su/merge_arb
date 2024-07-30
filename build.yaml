@@ -1,0 +1,13 @@
+# Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
+
+builders:
+  merge_arb:
+    import: "package:merge_arb/merge_arb.dart"
+    builder_factories: ["mergeArbBuilderFactory"]
+    build_extensions: {'$package$': ['.merged.arb']}
+    auto_apply: root_package
+    build_to: source
+    defaults:
+      options:
+        input_folder: 'l10n/src'
+        output_folder: 'lib/l10n/generated_code'
