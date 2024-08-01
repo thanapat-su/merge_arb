@@ -1,7 +1,17 @@
 name: merge_arb
-description: A starting point for Dart libraries or applications.
+description: Codegen that merges multiple ARB files into a single ARB file.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/ltman/merge_arb
+
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
+issue_tracker: https://github.com/ltman/merge_arb/issues
 
 environment:
   sdk: ^3.4.3
