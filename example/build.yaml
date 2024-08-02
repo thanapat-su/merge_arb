@@ -1,12 +1,8 @@
 targets:
   $default:
-    sources:
-      - 'l10n/src/**.arb'
-      - '$package$'
-      - 'lib/$lib$'
     builders:
       merge_arb:
         options:
-          input_path: 'l10n/src/*.arb'
+          input_path: 'lib/l10n/src/*.arb'
           output_folder: 'lib/l10n/generated_code'
           supported_locales: ['th', 'en']

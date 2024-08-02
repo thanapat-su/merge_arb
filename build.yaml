@@ -4,7 +4,7 @@ builders:
   merge_arb:
     import: "package:merge_arb/merge_arb.dart"
     builder_factories: ["mergeArbBuilderFactory"]
-    build_extensions: {'$package$': ['.merged.arb']}
+    build_extensions: {'lib/$lib$': ['.merged.arb']}
     auto_apply: root_package
     build_to: source
     defaults:

@@ -51,7 +51,7 @@ class MergeARBBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions {
     return {
-      r'$package$': supportedLocales.map((l) => '$outputFolder/app_$l.merged.arb').toList(),
+      r'lib/$lib$': supportedLocales.map((l) => '$outputFolder/app_$l.merged.arb').toList(),
     };
   }
 }
