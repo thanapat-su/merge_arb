@@ -9,5 +9,5 @@ builders:
     build_to: source
     defaults:
       options:
-        input_folder: 'l10n/src'
+        input_path: 'l10n/src/*.arb'
         output_folder: 'lib/l10n/generated_code'

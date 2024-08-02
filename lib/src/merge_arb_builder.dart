@@ -2,54 +2,56 @@ import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:glob/glob.dart';
+import 'dart:convert';
 
+part 'arb_reader.dart';
+
+/// Builder that merges multiple arb files into a single arb file per locale
 class MergeARBBuilder implements Builder {
   final BuilderOptions options;
   final List<String> supportedLocales;
-  final String inputFolder;
+  final String inputPath;
   final String outputFolder;
 
+  /// Constructor
   MergeARBBuilder(this.options)
       : supportedLocales = List<String>.from(options.config['supported_locales'] ?? []),
-        inputFolder = options.config['input_folder'] ?? '',
+        inputPath = options.config['input_path'] ?? '',
         outputFolder = options.config['output_folder'] ?? '';
 
   static MergeARBBuilder builder(BuilderOptions options) {
-    print('--------> Hello!!!');
-    print('option: ${options.config}');
     return MergeARBBuilder(options);
   }
 
   @override
   FutureOr<void> build(BuildStep buildStep) async {
-    for (int i = 0; i < supportedLocales.length; i++) {
-      StringBuffer mergedContent = StringBuffer();
-      final assets = buildStep.findAssets(Glob('$inputFolder/${supportedLocales[i]}/*.arb'));
-      await for (AssetId asset in assets) {
-        String content = (await buildStep.readAsString(asset)).trim();
+    Map<String, StringBuffer> mergedContents = {};
+    final assets = buildStep.findAssets(Glob(inputPath));
+    await for (AssetId asset in assets) {
+      String content = (await buildStep.readAsString(asset));
 
-        if (content.startsWith('{') && content.endsWith('}')) {
-          content = content.substring(1, content.length - 1).trimRight();
-        }
-
-        mergedContent.writeln('$content,');
+      _ArbReader arbReader = _ArbReader(content: content, assetPath: asset.path);
+      String locale = arbReader.locale;
+      if (!mergedContents.containsKey(locale)) {
+        mergedContents[locale] = StringBuffer()..writeln('  "@@locale": "$locale",');
+      }
+      mergedContents[locale]?.writeln('${arbReader.contentForMergeARB},');
+    }
+    for (String locale in supportedLocales) {
+      if (!mergedContents.containsKey(locale)) {
+        throw Exception('No arb files found for locale $locale');
       }
       await buildStep.writeAsString(
-        AssetId(buildStep.inputId.package, '$outputFolder/app_${supportedLocales[i]}.merged.arb'),
-        '{\n${mergedContent.toString().rightStrip(',')}\n}',
+        AssetId(buildStep.inputId.package, '$outputFolder/app_$locale.merged.arb'),
+        '{\n${mergedContents[locale].toString().rightStrip(',')}\n}',
       );
     }
   }
 
-
-
   @override
   Map<String, List<String>> get buildExtensions {
     return {
-      r'$package$': [
-        '$outputFolder/app_en.merged.arb',
-        '$outputFolder/app_th.merged.arb',
-      ],
+      r'$package$': supportedLocales.map((l) => '$outputFolder/app_$l.merged.arb').toList(),
     };
   }
 }
