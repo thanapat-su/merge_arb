@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Sort arb files by name when merging
+
 ## 0.2.0
 
 - Change build_extension to lib
