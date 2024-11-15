@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:build/build.dart';
 import 'package:glob/glob.dart';
-import 'dart:convert';
 
 part 'arb_reader.dart';
 
@@ -26,8 +27,9 @@ class MergeARBBuilder implements Builder {
   @override
   FutureOr<void> build(BuildStep buildStep) async {
     Map<String, StringBuffer> mergedContents = {};
-    final assets = buildStep.findAssets(Glob(inputPath));
-    await for (AssetId asset in assets) {
+    final assets = await buildStep.findAssets(Glob(inputPath)).toList();
+    assets.sort((a, b) => a.fileName.compareTo(b.fileName));
+    for (AssetId asset in assets) {
       String content = (await buildStep.readAsString(asset));
 
       _ArbReader arbReader = _ArbReader(content: content, assetPath: asset.path);
@@ -67,4 +69,8 @@ extension on String {
 
     return trimmed;
   }
+}
+
+extension on AssetId {
+  String get fileName => path.split(Platform.pathSeparator).last;
 }
