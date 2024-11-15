@@ -1,7 +1,6 @@
 part of 'merge_arb_builder.dart';
 
 class _ArbReader {
-
   final String _content;
   final Map<String, dynamic>? _dJson;
 
@@ -16,11 +15,10 @@ class _ArbReader {
 
   String get contentForMergeARB => _content.substring(1, _content.length - 1).trimRight();
 
-  _ArbReader({required String content, required this.assetPath}):
-        _content = content.trim(),
+  _ArbReader({required String content, required this.assetPath})
+      : _content = content.trim(),
         _localeFromAssetPath = getLocaleFromPath(assetPath),
-        _dJson = json.decode(content)
-  {
+        _dJson = json.decode(content) {
     assert(
       _dJson != null,
       'File content is not a valid JSON',
@@ -31,7 +29,9 @@ class _ArbReader {
       '\'@@locale\' property or as part of the filename (e.g. file_en.arb)',
     );
     assert(
-      !(_localeFromContent != null && _localeFromAssetPath != null && _localeFromContent != _localeFromAssetPath),
+      !(_localeFromContent != null &&
+          _localeFromAssetPath != null &&
+          _localeFromContent != _localeFromAssetPath),
       'The locale specified in @@locale and the arb filename do not match',
     );
   }
@@ -49,4 +49,3 @@ String? getLocaleFromPath(String path) {
   });
   return longestMatch.isEmpty ? null : longestMatch;
 }
-
