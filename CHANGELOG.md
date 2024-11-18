@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Move intl to dev_dependencies
+
 ## 0.3.0
 
 - Sort arb files by name when merging
