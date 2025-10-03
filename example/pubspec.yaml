@@ -6,7 +6,7 @@ environment:
   sdk: ^3.9.0
 
 dependencies:
-  build: ^4.0.1
+  build: ^4.0.0
   #ddd
 
 dev_dependencies:
