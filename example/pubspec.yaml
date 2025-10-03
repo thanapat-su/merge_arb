@@ -6,10 +6,10 @@ environment:
   sdk: ^3.9.0
 
 dependencies:
-  build: ^4.0.0
+  build: ^3.1.0
   #ddd
 
 dev_dependencies:
   merge_arb:
     path: ../
-  build_runner: ^2.9.0
+  build_runner: ^2.7.1
